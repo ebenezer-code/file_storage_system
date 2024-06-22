@@ -10,12 +10,7 @@ export default function Home() {
   return (
     <main >
       <nav>
-          <header> 
-              <div>
-                  <span></span>
-                  <h1>Dand<span>LY</span></h1>
-              </div>
-          </header>
+         
           <div>
               <SignedIn>
                 <SignOutButton >

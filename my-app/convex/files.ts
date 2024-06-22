@@ -19,7 +19,7 @@ export const getFiles = query({
     async handler(ctx, args){
         const userIdentity = await ctx.auth.getUserIdentity();
         if(!userIdentity) {
-            throw new ConvexError("Must login");
+           return [];
         }
         return ctx.db.query("files").collect();
     },
