@@ -2,15 +2,16 @@
 import { useOrganization, useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-
+import Image from "next/image";
 import { UploadButton } from "./upload-button";
 import { FileCard } from "./file-card";
+import homeIcon from "../public/homeIcon.svg";
+import { Loader2 } from "lucide-react";
 
 
 export default function Home() {
   const organization  = useOrganization();
   const user = useUser();
- 
 
 
   let orgID: string | undefined = undefined;
@@ -18,23 +19,44 @@ export default function Home() {
     orgID = organization.organization?.id ?? user.user?.id   
   }
   const files = useQuery(api.files.getFiles, orgID ? {orgID} : "skip");
-
+  const isLoading = files === undefined;
   return (
     <main className="container mx-auto pt-12">
-          <div  className="flex justify-between items-center">
-            <p  className="text-6xl font-bold">Welcome to Dand<span>LY</span>! <br/> Your Ultimate Solution for Secure File Storage 
-            </p>
-            <p>Dand<span>LY</span> offers an innovative file storage system powered by homomorphic encryption, ensuring your data remains secure, private, and accessible only to you, even during processing. Experience the future of data protection with our cutting-edge technology.</p>
-            <UploadButton />
-          </div>
-        
-        <div className="grid grid-cols-4 gap-4 mt-4 mb-8">
-            {
-              files?.map(file => {
-                return  <FileCard key={file._id} file = {file}/>
-              })
-            }
+      {isLoading && (
+        <div className="flex flex-col items-center w-full gap-8 mt-24">
+           <Loader2 className="h-32 w-32 animate-spin text-gray-700"/>
+            <div className="text-2xl">Please wait, loading your files...</div>
         </div>
+      )}
+            {!isLoading && files.length === 0 && (
+                  <div className="flex flex-col gap-6 w-full mt-12 items-center">
+                      <Image 
+                          alt="file storage image"
+                          width="300"
+                          height="300"
+                          src={homeIcon} />
+                        <div className="text-2xl">You have no files, proceed to upload!!</div>
+                        <UploadButton />
+                  </div>
+                  )
+                  } 
+          {!isLoading && files.length >= 1 &&  (
+            <>
+              <div  className="flex justify-between items-center">
+                  <div className="text-4xl font-bold">
+                      Your Files
+                    </div>
+                    <UploadButton/>
+                  </div>
+                  <div className="grid grid-cols-4 gap-4 mt-4 mb-8 w-full">
+                  {
+                    files?.map(file => {
+                      return  <FileCard key={file._id} file = {file}/>
+                    })
+                  }
+              </div>
+            </>
+          )}
     </main>
   );
 }
