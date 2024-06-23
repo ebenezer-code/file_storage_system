@@ -1,7 +1,7 @@
 export default {
     providers: [
       {
-        domain: "https://your-issuer-url.clerk.accounts.dev/",
+        domain: "https://handy-pig-74.clerk.accounts.dev",
         applicationID: "convex",
       },
     ]
