@@ -1,11 +1,10 @@
 "use client";
 import { useOrganization, useUser } from "@clerk/nextjs";
-import { useState } from "react";
-
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 import { UploadButton } from "./upload-button";
+import { FileCard } from "./file-card";
 
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
   if(organization.isLoaded && user.isLoaded) { 
     orgID = organization.organization?.id ?? user.user?.id   
   }
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const files = useQuery(api.files.getFiles, orgID ? {orgID} : "skip");
 
   return (
@@ -30,13 +28,13 @@ export default function Home() {
             <UploadButton />
           </div>
         
-        {
-          files?.map(file => {
-            return <div key={file._id}>
-              <h1>{file.name}</h1>
-            </div>
-          })
-        }
+        <div className="grid grid-cols-4 gap-4 mt-4 mb-8">
+            {
+              files?.map(file => {
+                return  <FileCard key={file._id} file = {file}/>
+              })
+            }
+        </div>
     </main>
   );
 }
