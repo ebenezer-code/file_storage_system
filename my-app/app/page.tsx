@@ -9,6 +9,7 @@ import homeIcon from "../public/homeIcon.svg";
 import { Loader2 } from "lucide-react";
 
 
+
 export default function Home() {
   const organization  = useOrganization();
   const user = useUser();
@@ -32,9 +33,7 @@ export default function Home() {
                   <div className="flex flex-col gap-6 w-full mt-12 items-center">
                       <Image 
                           alt="file storage image"
-                          width="300"
-                          height="300"
-                          src={homeIcon} />
+                          src={homeIcon}  priority/>
                         <div className="text-2xl">You have no files, proceed to upload!!</div>
                         <UploadButton />
                   </div>
